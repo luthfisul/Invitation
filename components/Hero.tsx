@@ -1,44 +1,47 @@
 "use client";
-
 import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
-    <section className="h-screen flex items-center">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 px-6">
+    <section className="min-h-screen flex items-center px-6">
+
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-center">
 
         {/* LEFT */}
-        <div className="flex flex-col justify-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl font-heading mb-6"
-          >
-            Beautiful Digital Wedding Invitations
-          </motion.h1>
-
-          <p className="text-gray-600 mb-6">
-            Elegant templates crafted for unforgettable moments.
+        <div>
+          <p className="text-sm tracking-widest text-gray-400 mb-4">
+            PREMIUM DIGITAL INVITATION
           </p>
 
-          <div className="flex gap-4">
-            <button className="bg-primary text-white px-6 py-3 rounded-full">
-              Explore Templates
+          <h1 className="text-5xl md:text-6xl leading-tight font-serif">
+            Undangan Web
+            <br />
+            yang <span className="text-[var(--gold)] italic">Estetik</span>
+          </h1>
+
+          <p className="mt-6 text-gray-500 max-w-md">
+            Buat momen pernikahanmu lebih berkesan dengan undangan digital elegan.
+          </p>
+
+          <div className="mt-8 flex gap-4">
+            <button className="bg-black text-white px-6 py-3 rounded-full">
+              Lihat Desain
             </button>
+
             <button className="border px-6 py-3 rounded-full">
               Custom Design
             </button>
           </div>
         </div>
 
-        {/* RIGHT */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="flex justify-center items-center"
+        {/* RIGHT PREVIEW */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex justify-center"
         >
-          <div className="w-[280px] h-[500px] bg-white shadow-2xl rounded-3xl p-4">
-            <div className="w-full h-full bg-gray-200 rounded-2xl flex items-center justify-center">
+          <div className="w-[280px] h-[520px] rounded-[40px] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.2)] p-3">
+            <div className="w-full h-full rounded-[30px] bg-gray-200 flex items-center justify-center">
               Preview
             </div>
           </div>
