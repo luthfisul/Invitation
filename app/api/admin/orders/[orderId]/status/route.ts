@@ -1,18 +1,17 @@
-// ============================================================
 // app/api/admin/orders/[orderId]/status/route.ts
-// PATCH /api/admin/orders/:orderId/status — admin only
-// ============================================================
-
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser }            from "@/lib/auth";
 import { supabase }                  from "@/lib/supabase";
 
-interface Params { params: { orderId: string } }
-
-export async function PATCH(req: NextRequest, { params }: Params) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ orderId: string }> }
+) {
   try {
+    const { orderId } = await params;
     const user        = await getCurrentUser();
     const adminEmails = (process.env.ADMIN_EMAILS ?? "").split(",").map(e => e.trim());
+
     if (!user || !adminEmails.includes(user.email ?? "")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
@@ -26,7 +25,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     const { error } = await supabase
       .from("orders")
       .update({ status })
-      .eq("id", params.orderId);
+      .eq("id", orderId);
 
     if (error) throw new Error(error.message);
     return NextResponse.json({ success: true });
