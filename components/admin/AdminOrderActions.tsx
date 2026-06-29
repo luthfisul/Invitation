@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useTransition } from "next/dist/client/components/react-dev-overlay/app/hooks/use-transition";
+import { useState, useTransition } from "react";
 import { useRouter }               from "next/navigation";
 import { cn }                      from "@/lib/utils";
 import type { OrderRow }           from "@/types/database";
@@ -40,19 +40,13 @@ export default function AdminOrderActions({
   async function handleUpdateStatus() {
     setMessage(null); setError(null);
     startTransition(async () => {
-      const res  = await fetch(`/api/orders/${orderId}`, {
-        method:  "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ updates: {} }), // hanya status
-      });
-      // Pakai API khusus admin untuk update status
-      const res2 = await fetch(`/api/admin/orders/${orderId}/status`, {
+      const res = await fetch(`/api/admin/orders/${orderId}/status`, {
         method:  "PATCH",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify({ status }),
       });
-      const json = await res2.json();
-      if (!res2.ok) { setError(json.error); return; }
+      const json = await res.json();
+      if (!res.ok) { setError(json.error); return; }
       setMessage("Status berhasil diperbarui.");
       router.refresh();
     });
