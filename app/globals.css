@@ -1,15 +1,44 @@
+/* ============================================================
+   app/globals.css
+   Global styles — design tokens & base resets
+   ============================================================ */
+
 @import "tailwindcss";
 
+/* ── Design Tokens ── */
 :root {
-  --green: #3F5E4D;
-  --brown: #8B6F47;
-  --gold: #D4B483;
-  --cream: #F7F3EE;
-  --dark: #1E1E1E;
+  --color-primary:    #C6A98C;
+  --color-primary-dark: #A8896C;
+  --color-dark:       #2B2B2B;
+  --color-muted:      #888888;
+  --color-light:      #F7F3EE;
+  --color-white:      #FFFFFF;
+  --color-border:     #E5DDD3;
+
+  --font-inter:       var(--font-inter), 'Inter', sans-serif;
+}
+
+/* ── Base ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--cream);
-  color: var(--dark);
-  font-family: Inter, sans-serif;
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
 }
+
+/* ── Utility: primary color via CSS var (Tailwind v4 compatible) ── */
+.text-primary   { color: var(--color-primary); }
+.bg-primary     { background-color: var(--color-primary); }
+.border-primary { border-color: var(--color-primary); }
+.text-muted     { color: var(--color-muted); }
+.bg-light       { background-color: var(--color-light); }

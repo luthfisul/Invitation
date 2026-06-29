@@ -1,7 +1,12 @@
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
+// ============================================================
+// app/page.tsx
+// Entry point halaman utama
+// ============================================================
+
+import Navbar  from "@/components/Navbar";
+import Hero    from "@/components/Hero";
 import Gallery from "@/components/Gallery";
-import Footer from "@/components/Footer";
+import Footer  from "@/components/Footer";
 
 export default function Home() {
   return (

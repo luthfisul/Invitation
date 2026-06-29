@@ -1,55 +1,77 @@
+// ============================================================
+// components/Gallery.tsx
+// Section katalog template — data-driven dari templates.ts
+// ============================================================
+
 "use client";
 
 import { useState } from "react";
-import { templates } from "@/data/templates";
 import TemplateCard from "./TemplateCard";
+import { templates } from "@/data/templates";
+import type { Template, TemplateCategory } from "@/types";
+
+type FilterOption = "all" | TemplateCategory;
+
+const filterOptions: { label: string; value: FilterOption }[] = [
+  { label: "Semua",     value: "all" },
+  { label: "Modern",    value: "modern" },
+  { label: "Rustic",    value: "rustic" },
+  { label: "Minimalis", value: "minimalist" },
+  { label: "Floral",    value: "floral" },
+  { label: "Royal",     value: "royal" },
+  { label: "Bohemian",  value: "bohemian" },
+];
 
 export default function Gallery() {
-  const [active, setActive] = useState("Semua");
+  const [activeFilter, setActiveFilter] = useState<FilterOption>("all");
 
-  const filters = ["Semua", "Basic", "Menengah", "Profesional"];
-
-  const filteredData =
-    active === "Semua"
+  const filtered: Template[] =
+    activeFilter === "all"
       ? templates
-      : templates.filter((item) => item.category === active);
+      : templates.filter((t) => t.category.includes(activeFilter as TemplateCategory));
 
   return (
-    <section className="py-20 bg-[#F5F1EA]">
-      <div className="max-w-7xl mx-auto px-6 text-center">
+    <section id="gallery" className="py-20">
+      <div className="max-w-7xl mx-auto px-6">
 
-        <h2 className="text-3xl font-serif mb-2">
-          Pilih Tema Undanganmu
-        </h2>
+        {/* Heading */}
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-semibold mb-2">Jelajahi Template Kami</h2>
+          <p className="text-muted text-sm">
+            Pilih desain yang paling sesuai dengan kepribadian dan tema pernikahanmu.
+          </p>
+        </div>
 
-        <p className="text-gray-500 mb-8">
-          Temukan desain yang paling menggambarkan ceritamu.
-        </p>
-
-        {/* FILTER */}
-        <div className="flex justify-center gap-3 mb-10 flex-wrap">
-          {filters.map((item) => (
+        {/* Filter pills */}
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
+          {filterOptions.map((opt) => (
             <button
-              key={item}
-              onClick={() => setActive(item)}
-              className={`px-4 py-2 rounded-full text-sm transition
-                ${
-                  active === item
-                    ? "bg-[var(--gold)] text-white"
-                    : "border text-gray-600"
-                }`}
+              key={opt.value}
+              onClick={() => setActiveFilter(opt.value)}
+              className={[
+                "px-4 py-2 rounded-full text-sm border transition-colors duration-200",
+                activeFilter === opt.value
+                  ? "bg-primary text-white border-primary"
+                  : "border-gray-300 text-gray-600 hover:border-primary hover:text-primary",
+              ].join(" ")}
             >
-              {item}
+              {opt.label}
             </button>
           ))}
         </div>
 
-        {/* GRID */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {filteredData.map((item) => (
-            <TemplateCard key={item.id} data={item} />
-          ))}
-        </div>
+        {/* Grid */}
+        {filtered.length > 0 ? (
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {filtered.map((template) => (
+              <TemplateCard key={template.id} template={template} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-muted py-20">
+            Tidak ada template untuk kategori ini.
+          </p>
+        )}
 
       </div>
     </section>
