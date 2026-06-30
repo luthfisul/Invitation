@@ -23,7 +23,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Client utama — dipakai di seluruh aplikasi
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 
 // ============================================================
