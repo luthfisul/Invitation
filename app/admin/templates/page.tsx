@@ -14,16 +14,17 @@ export default async function AdminTemplatesPage() {
   await requireAdmin();
   const supabase = createServerSupabase();
 
-  const { data: templates } = await supabase
+  const result = await supabase
     .from("templates")
     .select("*")
     .order("price", { ascending: true });
+  const templates: any[] = result.data ?? [];
 
-  const { data: usageData } = await supabase
+  const usageResult = await supabase
     .from("orders")
     .select("template_id")
     .in("status", ["paid", "published"]);
-  const usage: UsageRow[] = (usageData ?? []) as UsageRow[];
+  const usage: UsageRow[] = (usageResult.data ?? []) as UsageRow[];
 
   const usageMap: Record<string, number> = {};
   for (const o of usage) {
@@ -40,11 +41,11 @@ export default async function AdminTemplatesPage() {
     <div className="space-y-6 max-w-5xl">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-semibold">Template Catalog</h1>
-        <p className="text-xs text-gray-400">{templates?.length ?? 0} template tersedia</p>
+        <p className="text-xs text-gray-400">{templates.length} template tersedia</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        {(templates ?? []).map((t) => (
+        {templates.map((t) => (
           <div key={t.id} className={["bg-white border rounded-2xl p-5 transition-opacity", !t.is_active ? "opacity-50" : ""].join(" ")}>
             <div className="flex items-start justify-between gap-3 mb-3">
               <div>
