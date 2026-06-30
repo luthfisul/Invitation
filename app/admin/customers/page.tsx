@@ -8,6 +8,14 @@ interface PageProps {
   searchParams: Promise<{ search?: string; page?: string }>;
 }
 
+interface CustomerRow {
+  id: string;
+  full_name: string | null;
+  email: string;
+  phone: string | null;
+  created_at: string;
+}
+
 const PAGE_SIZE = 20;
 
 export default async function AdminCustomersPage({ searchParams }: PageProps) {
@@ -26,8 +34,9 @@ export default async function AdminCustomersPage({ searchParams }: PageProps) {
 
   if (search) query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%`);
 
-  const { data: customers, count } = await query;
-  const customerIds = (customers ?? []).map((c) => c.id);
+  const { data, count } = await query;
+  const customers = (data ?? []) as CustomerRow[];
+  const customerIds = customers.map((c) => c.id);
 
   const { data: orderCounts } = await supabase
     .from("orders").select("user_id").in("user_id", customerIds);
@@ -61,10 +70,10 @@ export default async function AdminCustomersPage({ searchParams }: PageProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
-            {(customers ?? []).length === 0 && (
+            {customers.length === 0 && (
               <tr><td colSpan={5} className="px-4 py-12 text-center text-gray-400 text-sm">Tidak ada customer.</td></tr>
             )}
-            {(customers ?? []).map((c) => (
+            {customers.map((c) => (
               <tr key={c.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3 font-medium">{c.full_name ?? "—"}</td>
                 <td className="px-4 py-3 text-gray-500">{c.email}</td>
