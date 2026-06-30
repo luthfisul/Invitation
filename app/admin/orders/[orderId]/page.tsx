@@ -18,11 +18,14 @@ export default async function AdminOrderDetailPage({ params }: PageProps) {
   const { orderId } = await params;
   const supabase = createServerSupabase();
 
-  const { data: order, error } = await supabase
+  const result = await supabase
     .from("orders")
     .select(`*, templates (*), invitation_data (*), invitations (*), payments (*), users ( id, full_name, email, phone )`)
     .eq("id", orderId)
     .single();
+
+  const order: any = result.data;
+  const error = result.error;
 
   if (error || !order) notFound();
 

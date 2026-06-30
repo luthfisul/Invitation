@@ -48,7 +48,9 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
 
   if (status) query = query.eq("status", status as OrderRow["status"]);
 
-  const { data: orders, count } = await query;
+  const result = await query;
+  const orders: any[] = result.data ?? [];
+  const count = result.count;
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE);
 
   return (
@@ -79,13 +81,13 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {(orders ?? []).length === 0 && (
+              {orders.length === 0 && (
                 <tr><td colSpan={8} className="px-4 py-12 text-center text-gray-400 text-sm">Tidak ada pesanan.</td></tr>
               )}
-              {(orders ?? []).map((order) => {
-                const tpl  = order.templates      as unknown as { name: string } | null;
-                const invD = order.invitation_data as unknown as { bride_full_name: string; groom_full_name: string; event_date: string } | null;
-                const usr  = order.users           as unknown as { full_name: string; email: string } | null;
+              {orders.map((order) => {
+                const tpl  = order.templates      as { name: string } | null;
+                const invD = order.invitation_data as { bride_full_name: string; groom_full_name: string; event_date: string } | null;
+                const usr  = order.users           as { full_name: string; email: string } | null;
                 return (
                   <tr key={order.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 font-mono text-xs text-gray-500 whitespace-nowrap">{order.order_number}</td>

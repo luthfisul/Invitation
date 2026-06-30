@@ -69,7 +69,7 @@ export default async function OrdersPage() {
           {allOrders.map((order) => {
             const tpl  = order.templates     as unknown as TemplateRow | null;
             const inv  = order.invitations   as unknown as InvitationRow | null;
-            const invD = order.invitation_data as unknown as {
+            const invD = order.invitation_data as {
               bride_full_name: string;
               groom_full_name: string;
               event_date: string;
