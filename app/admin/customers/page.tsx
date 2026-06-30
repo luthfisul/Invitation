@@ -16,6 +16,10 @@ interface CustomerRow {
   created_at: string;
 }
 
+interface OrderUserRow {
+  user_id: string | null;
+}
+
 const PAGE_SIZE = 20;
 
 export default async function AdminCustomersPage({ searchParams }: PageProps) {
@@ -35,14 +39,15 @@ export default async function AdminCustomersPage({ searchParams }: PageProps) {
   if (search) query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%`);
 
   const { data, count } = await query;
-  const customers = (data ?? []) as CustomerRow[];
+  const customers: CustomerRow[] = (data ?? []) as CustomerRow[];
   const customerIds = customers.map((c) => c.id);
 
-  const { data: orderCounts } = await supabase
+  const { data: orderCountsData } = await supabase
     .from("orders").select("user_id").in("user_id", customerIds);
+  const orderCounts: OrderUserRow[] = (orderCountsData ?? []) as OrderUserRow[];
 
   const countMap: Record<string, number> = {};
-  for (const o of orderCounts ?? []) {
+  for (const o of orderCounts) {
     if (o.user_id) countMap[o.user_id] = (countMap[o.user_id] ?? 0) + 1;
   }
 
